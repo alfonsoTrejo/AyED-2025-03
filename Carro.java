@@ -5,10 +5,8 @@ package com.mycompany.algoritmos2025lab3;
  * @author trejo
  */
 import java.time.LocalTime;
-import java.util.UUID;
 
 public class Carro {
-    private String id;
     private String tamaño; // "pequeño", "mediano", "grande"
     private String servicio; // "aspirado" o "secado express"
     private boolean clientePreferente;
@@ -18,7 +16,6 @@ public class Carro {
 
     // Constructor
     public Carro(String tamaño, String servicio, boolean clientePreferente, LocalTime horaLlegada) {
-        this.id = UUID.randomUUID().toString().substring(0, 8); // Identificador único
         this.tamaño = tamaño;
         this.servicio = servicio;
         this.clientePreferente = clientePreferente;
@@ -40,7 +37,6 @@ public class Carro {
     }
 
     // Métodos Getters
-    public String getId() { return id; }
     public String getTamaño() { return tamaño; }
     public String getServicio() { return servicio; }
     public boolean esPreferente() { return clientePreferente; }
@@ -56,7 +52,7 @@ public class Carro {
     // Representación en texto del vehículo
     @Override
     public String toString() {
-        return String.format("Vehiculo [%s] - Tamaño: %s, Servicio: %s, Preferente: %b, Llegada: %s, Salida: %s",
-                id, tamaño, servicio, clientePreferente, horaLlegada, (horaSalida != null ? horaSalida : "En proceso"));
+        return String.format("Vehiculo - Tamaño: %s, Servicio: %s, Preferente: %b, Llegada: %s, Salida: %s",
+                 tamaño, servicio, clientePreferente, horaLlegada, (horaSalida != null ? horaSalida : "En proceso"));
     }
 }
