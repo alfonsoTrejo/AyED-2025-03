@@ -75,13 +75,14 @@ public class Simulacion {
             }
 
             if (!lineaAcceso.estaVacia()) {
-                if (lineaLavado.tamano() < 3) {
-                    Vehiculo vehiculo = lineaAcceso.quitar();
-                    vehiculo.setTiempoLLegadaLavado(tiempoInicio.getHoraCompleta());
-                    lineaLavado.agregar(vehiculo);
+                if (tiempoInicio.minutosDesde(lineaAcceso.obtenerFrente().getHoraLlegada()) >= 1) {
+                    if (lineaLavado.tamano() < 3) {
+                        Vehiculo vehiculo = lineaAcceso.quitar();
+                        vehiculo.setTiempoLLegadaLavado(tiempoInicio.getHoraCompleta());
+                        lineaLavado.agregar(vehiculo);
+                    }
                 }
             }
-
             if (!lineaLavado.estaVacia()) {
                 if (tiempoInicio.minutosDesde(lineaLavado.obtenerFrente().getTiempoLLegadaLavado()) >= 3) {
                     Vehiculo vehiculo = lineaLavado.obtenerFrente();
@@ -111,7 +112,7 @@ public class Simulacion {
                     }
                 }
             }
-            if(false){
+            if(true){
                 for (int i = 0; i < 4; i++) {
                     if (!lineaAspirado[i].estaVacia()) {
                         Vehiculo vehiculo = lineaAspirado[i].obtenerFrente();

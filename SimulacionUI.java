@@ -132,7 +132,7 @@ public class SimulacionUI extends JFrame {
         for (Vehiculo v : log) {
             logArea.append(v.toString() + "\n");
         }
-    
+        logArea.append("Total de vehículos atendidos: " + log.size() + "\n");
         logArea.setEditable(false);
         JScrollPane scroll = new JScrollPane(logArea);
         scroll.setPreferredSize(new Dimension(700, 500));
