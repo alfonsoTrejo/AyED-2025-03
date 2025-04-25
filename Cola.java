@@ -13,7 +13,12 @@ public class Cola<T> {
     public Cola() {
         this(10);
     }
-
+    public T obtenerElemento(int index) {
+        if (index >= 0 && index < tamaño) {
+            return cola[(frente + index) % cola.length];
+        }
+        return null;
+    }
     public boolean agregar(T elemento) {
         if (tamaño == cola.length) {
             return false; // Cola llena
