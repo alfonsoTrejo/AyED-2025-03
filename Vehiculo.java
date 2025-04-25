@@ -66,7 +66,10 @@ public class Vehiculo {
                 "tamano=" + tamano +
                 ", servicio=" + servicio +
                 ", clientePreferente=" + clientePreferente +
-                ", horaLlegada=" + horaLlegada.toString() +
+                ", horaLlegada=" + horaLlegada +
+                ", tiempoLLegadaLavado=" + (tiempoLLegadaLavado != null ? tiempoLLegadaLavado : "N/A") +
+                ", tiempoLLegadaAspirado=" + (tiempoLLegadaAspirado != null ? tiempoLLegadaAspirado : "N/A") +
+                ", horaSalida=" + (horaSalida != null ? horaSalida : "N/A") +
                 '}';
     }
 }

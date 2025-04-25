@@ -14,6 +14,7 @@ public class Simulacion {
     private Cola<Vehiculo> lineaLavado;
     //Log historico de todos los vehiculos lavados
     private ArrayList<Vehiculo> logVehiculosLavados = new ArrayList<>();
+    private SimulacionUI ui;
 
     public timStamp getTiempoInicio() {
         return tiempoInicio;
@@ -100,7 +101,7 @@ public class Simulacion {
         simulacion.conColaAingresar = 0; // contador que ayuda a saber en que cola se va a ingresar el vehiculo
 
         // Inicializar el tiempo de espera
-        int tiempoEspera = 200; // 1 segundo
+        int tiempoEspera = 1; // 1 segundo
 
         // Crear las colas
         simulacion.lineaAspirado = new Cola[4];
@@ -113,7 +114,7 @@ public class Simulacion {
 
         // Inicializar el tiempo de llegada
         simulacion.tiempoInicio = new timStamp(8, 0, 0);
-        simulacion.tiempoFin = new timStamp(16, 1, 0);
+        simulacion.tiempoFin = new timStamp(18, 1, 0);
 
         int minutosPasados = 0;
         int minutosParaProximoVehiculo = 2 + (int) (Math.random() * 7); // 2 a 8
@@ -153,7 +154,10 @@ public class Simulacion {
                     + simulacion.tiempoInicio.getMinuto() + ":" + simulacion.tiempoInicio.getSegundo());
 
             // se genera un nuevo vehiculo cada 2 a 8 minutos
-            if (minutosPasados % minutosParaProximoVehiculo == 0 && simulacion.lineaAcceso.tamano() < 10) {
+            if (simulacion.tiempoInicio.comparar(new timStamp(17, 45, 0)) != 1 &&
+                minutosPasados % minutosParaProximoVehiculo == 0 && 
+                simulacion.lineaAcceso.tamano() < 10) {
+
                 System.out.println("\n\n\n" + "se genero carro a los " + minutosParaProximoVehiculo + " minutos\n\n\n");
                 Vehiculo nuevoVehiculo = simulacion.generarVehiculo();
 
@@ -203,15 +207,38 @@ public class Simulacion {
             }
             
             // procesar la cola de aspirado y la de secado express
-//            for (int i = 0; i < 4; i++) {
-//                if (!simulacion.lineaAspirado[i].estaVacia()) {
-//                    if (simulacion.tiempoInicio.minutosDesde(simulacion.lineaAspirado[i].obtenerFrente().getTiempoLLegadaAspirado()) >= 3) {
-//                        Vehiculo vehiculo = simulacion.lineaAspirado[i].quitar();
-//                        simulacion.logVehiculosLavados.add(vehiculo);
-//                    }
-//                }
-//            }
+            for (int i = 0; i < 4; i++) {
+                if (simulacion.lineaAspirado[i].estaVacia()) {
+                    continue; 
+                }
+
+                Vehiculo vehiculo = simulacion.lineaAspirado[i].obtenerFrente();
+
+                int minutosEsperados = 0;
+                switch (vehiculo.getTamano()) {
+                    case PEQUENO: minutosEsperados = 5; break;
+                    case MEDIANO: minutosEsperados = 7; break;
+                    case GRANDE:  minutosEsperados = 10; break;
+                }
+
+                if (vehiculo != null) {
+                    if (simulacion.tiempoInicio.minutosDesde(vehiculo.getTiempoLLegadaAspirado()) >= minutosEsperados) {
+                        vehiculo.setHoraSalida(simulacion.tiempoInicio.getHoraCompleta());
+                        simulacion.logVehiculosLavados.add(vehiculo);
+                        simulacion.lineaAspirado[i].quitar();
+                    }
+                }
+            }
             
+            if(!simulacion.lineaExpress.estaVacia()){
+                Vehiculo vehiculo = simulacion.lineaExpress.obtenerFrente();
+                int minutosEsperados = 3;
+                if (simulacion.tiempoInicio.minutosDesde(vehiculo.getTiempoLLegadaAspirado()) >= minutosEsperados) {
+                    vehiculo.setHoraSalida(simulacion.tiempoInicio.getHoraCompleta());
+                    simulacion.logVehiculosLavados.add(vehiculo);
+                    simulacion.lineaExpress.quitar();
+                }
+            }
 
 
 
@@ -236,6 +263,11 @@ public class Simulacion {
                 e.printStackTrace();
             }
         }
+        System.out.println("\n\n🚘 Vehículos lavados al final del día:");
+        for (Vehiculo v : simulacion.logVehiculosLavados) {
+            System.out.println(v);
+        }
+        System.out.println("Total: " + simulacion.logVehiculosLavados.size() + " vehículos.");
 
         System.out.println("NOs fuimos a la verga");
     }
